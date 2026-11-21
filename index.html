@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dona do Preço – gestão simples</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6fc;--fg:#1d2433;--mut:#566178;--card:#fff;--bd:#d6dfee;--pri:#1a62c9;--on:#fff;--hi:#ffd45e;--hif:#3a2c00;--bad:#b3261e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1624;--fg:#eaf0fb;--mut:#9fadc6;--card:#172033;--bd:#2b3a57;--pri:#82b4ff;--on:#0a1730;--hi:#ffd45e;--hif:#3a2c00;--bad:#ff8a80}}
+:root[data-theme="dark"]{--bg:#0f1624;--fg:#eaf0fb;--mut:#9fadc6;--card:#172033;--bd:#2b3a57;--pri:#82b4ff;--on:#0a1730;--hi:#ffd45e;--hif:#3a2c00;--bad:#ff8a80}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.45 "Atkinson Hyperlegible",system-ui,sans-serif}
+header{padding:18px 16px 4px;max-width:640px;margin:auto}
+h1{font-size:1.5rem;margin:0}
+main{max-width:640px;margin:auto;padding:8px 16px 110px}
+h2{font-size:1.2rem;margin:10px 0}
+h3{font-size:1rem;margin:16px 0 6px}
+.h{color:var(--mut);margin:4px 0 12px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:0 0 14px}
+label{display:block;font-size:.88rem;color:var(--mut);margin:0 0 10px}
+input,select{display:block;width:100%;margin-top:4px;padding:11px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px;min-height:46px}
+input:focus,select:focus,button:focus-visible{outline:3px solid var(--pri);outline-offset:1px}
+.g2,.g3{display:grid;gap:10px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1.2fr 1fr 1fr}
+.row{display:grid;grid-template-columns:1fr 80px auto 40px;gap:8px;align-items:center;margin-bottom:8px}
+.row.t{grid-template-columns:1fr 100px 40px}
+.row input,.row select{margin:0}
+.u{font-size:.85rem;color:var(--mut);min-width:34px}
+button{font:inherit;cursor:pointer;border-radius:8px;min-height:44px;border:1px solid var(--bd);background:var(--card);color:var(--fg);padding:8px 14px}
+.add{width:100%;border:2px dashed var(--pri);color:var(--pri);background:transparent;font-weight:700}
+.add.s{min-height:40px;margin-bottom:4px}
+.x{color:var(--bad);background:transparent;margin-top:8px}
+.row .x{margin:0;padding:0;font-size:1.3rem}
+.o{color:var(--mut);margin:0;min-height:1.4em}
+.res{margin-top:14px;border-top:1px solid var(--bd);padding-top:10px}
+.res div{display:flex;justify-content:space-between;padding:2px 0}
+.res .big{font-size:1.05rem;font-weight:700}
+.res .pv{background:var(--hi);color:var(--hif);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:1.25rem;font-weight:700}
+.pri{background:var(--pri);color:var(--on);border-color:var(--pri);font-weight:700;width:100%;margin-top:8px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;border-radius:0;min-height:56px;background:transparent;color:var(--mut)}
+nav button.on{color:var(--pri);font-weight:700;box-shadow:inset 0 3px 0 var(--pri)}
+.tot{font-size:1.4rem;font-weight:700;display:flex;justify-content:space-between}
+@media print{nav,button,.h,.noprint{display:none!important}body{background:#fff;color:#000}.c{border:0}}
+.al{color:var(--bad);font-size:.9rem;margin:6px 0 0}
+.mt{background:var(--hi);color:var(--hif)}
+.mt div{display:flex;justify-content:space-between;gap:10px}
+.mt .o{color:inherit}
+header{display:flex;align-items:center;gap:12px;padding-bottom:14px;position:relative}
+header::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:4px;border-radius:2px;background:linear-gradient(90deg,#1a62c9 0 25%,#e5383b 0 50%,#f2b705 0 75%,#2a9d5c 0)}
+footer{max-width:640px;margin:0 auto 90px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--mut);font-size:.9rem}
+textarea{display:block;width:100%;min-height:90px;margin:8px 0;padding:11px;font:inherit;font-size:.85rem;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:8px}
+.lk{display:block;text-align:center;text-decoration:none;padding:12px 14px;border-radius:8px}
+nav button{padding:8px 2px;font-size:.82rem}
+textarea:focus{outline:3px solid var(--pri);outline-offset:1px}
+.li{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--bd);border-radius:0;background:transparent}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<header><svg width="46" height="46" viewBox="0 0 50 50" role="img" aria-label="Símbolo do autismo: peças de quebra-cabeça coloridas"><g transform="translate(0,0) rotate(0 12 12)" fill="#1a62c9"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,0) rotate(90 12 12)" fill="#e5383b"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(0,25) rotate(270 12 12)" fill="#f2b705"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,25) rotate(180 12 12)" fill="#2a9d5c"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g></svg><h1 id="ttl">Dona do Preço</h1></header>
+<div id="gs" class="noprint" role="status" style="max-width:640px;margin:0 auto;padding:6px 16px;font-size:.9rem;color:var(--mut)"></div>
+<main id="m"></main>
+<footer class="noprint"><svg width="40" height="20" viewBox="0 0 24 12" role="img" aria-label="Símbolo do infinito, da neurodiversidade"><defs><linearGradient id="rb"><stop offset="0" stop-color="#e5383b"/><stop offset=".25" stop-color="#f2b705"/><stop offset=".5" stop-color="#2a9d5c"/><stop offset=".75" stop-color="#1a62c9"/><stop offset="1" stop-color="#7a3fb5"/></linearGradient></defs><path d="M12 6C9 1 2 1 2 6s7 5 10 0 10-5 10 0-7 5-10 0z" fill="none" stroke="url(#rb)" stroke-width="2.2" stroke-linecap="round"/></svg><span>Feita com carinho para mães atípicas · <a href="privacidade.html" style="color:inherit">Política de privacidade</a></span></footer>
+<nav id="nav"></nav>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const n=v=>parseFloat(v)||0;
+const R=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const uid=()=>Math.random().toString(36).slice(2,8);
+const blank=()=>({cfg:{nome:'',hora:'',taxa:0,margem:30,meta:''},mats:[],prods:[],desp:[],orc:{cliente:'',tel:'',prazo:'',validade:7,desc:0,frete:0,pgto:'',itens:[]}});
+let S=null;
+try{S=JSON.parse(localStorage.getItem('precocerto'))}catch(e){}
+S=S||blank();
+S.desp=S.desp||[];S.cfg.meta=S.cfg.meta||'';S.orc.desc=S.orc.desc||0;S.orc.frete=S.orc.frete||0;S.orc.pgto=S.orc.pgto||'';
+S.prods.forEach(p=>{if(p.min==null)p.min=p.horas?n(p.horas)*60:'';if(p.mes==null)p.mes='';if(p.preco==null)p.preco=''});
+let tab='ajuda';
+const save=()=>{S._t=Date.now();try{localStorage.setItem('precocerto',JSON.stringify(S))}catch(e){}gQueue()};
+const matUn=m=>n(m.qtd)>0?n(m.preco)/n(m.qtd):0;
+const findM=id=>S.mats.find(x=>x.id==id);
+const fixoU=()=>{const v=S.prods.reduce((a,p)=>a+n(p.mes),0);return v>0?S.desp.reduce((a,x)=>a+n(x.valor),0)/v:0};
+function cost(p){
+  const r=Math.max(n(p.rend),1);
+  const mat=p.itens.reduce((a,i)=>{const m=findM(i.mat);return a+(m?matUn(m)*n(i.q):0)},0)/r;
+  const mo=n(p.min)/60*n(S.cfg.hora)/r;
+  const ter=p.terc.reduce((a,t)=>a+n(t.valor),0)/r;
+  const fixo=fixoU(),vr=mat+mo+ter,un=vr+fixo;
+  const f=1-(n(S.cfg.margem)+n(S.cfg.taxa))/100;
+  const sug=f>0.05?un/f:un;
+  const usado=n(p.preco)>0?n(p.preco):sug;
+  const lucro=usado*(1-n(S.cfg.taxa)/100)-un;
+  const av=[];
+  if(!p.itens.length)av.push('Adicione os materiais.');
+  if(p.itens.some(i=>{const m=findM(i.mat);return !m||matUn(m)<=0}))av.push('Há material sem escolha ou sem preço.');
+  if(n(p.min)&&!n(S.cfg.hora))av.push('Informe o valor da sua hora em Ajustes.');
+  if(lucro<0)av.push('Preço abaixo do custo.');
+  return {mat,mo,ter,fixo,vr,un,sug,usado,lucro,av};
+}
+const resMes=()=>S.prods.reduce((a,p)=>{const c=cost(p);return a+n(p.mes)*(c.usado*(1-n(S.cfg.taxa)/100)-c.vr)},0)-S.desp.reduce((a,x)=>a+n(x.valor),0);
+function P(p,v){const a=p.split('.');let o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]];o[a[a.length-1]]=v;save();upd()}
+function add(k){
+  if(k==='mats')S.mats.push({id:uid(),nome:'',preco:'',qtd:'',un:''});
+  if(k==='prods')S.prods.push({id:uid(),nome:'',rend:1,min:'',mes:'',preco:'',itens:[],terc:[]});
+  if(k==='desp')S.desp.push({nome:'',valor:''});
+  save();render();
+}
+function del(k,i){S[k].splice(i,1);save();render()}
+function dup(i){const c=JSON.parse(JSON.stringify(S.prods[i]));c.id=uid();c.nome+=' (cópia)';S.prods.splice(i+1,0,c);save();render()}
+function addSub(i,k){S.prods[i][k].push(k==='itens'?{mat:'',q:''}:{desc:'',valor:''});save();render()}
+function delSub(i,k,j){S.prods[i][k].splice(j,1);save();render()}
+function addO(){S.orc.itens.push({prod:'',q:1});save();render()}
+function delO(j){S.orc.itens.splice(j,1);save();render()}
+
+const inp=(path,val,label,extra='')=>`<label>${label}<input ${extra} value="${esc(val)}" oninput="P('${path}',this.value)"></label>`;
+const num=(path,val,label)=>inp(path,val,label,'type="number" inputmode="decimal" min="0" step="any"');
+
+const passo=(t,txt,k,b)=>`<div class="c"><h3 style="margin-top:0">${t}</h3>${txt}<button class="add s" style="margin-top:8px" onclick="go('${k}')">${b}</button></div>`;
+const vAjuda=()=>`<h2>Como usar o Dona do Preço</h2><p class="h">Siga a ordem abaixo. Você não precisa fazer tudo de uma vez: comece com um produto só.</p>`
++passo('Passo 1 – Ajustes (uma vez só)','<p>Escreva o nome do seu negócio e quanto vale a sua hora de trabalho. Informe também as taxas de venda (como a da maquininha), o lucro que você deseja e as despesas fixas do mês (luz, internet, gás). Se não souber algum valor, deixe em branco e volte depois.</p>','cfg','Ir para Ajustes')
++passo('Passo 2 – Materiais','<p>Cadastre tudo o que você compra para produzir. Informe o nome, o preço que pagou, a quantidade que veio e a unidade.</p><p><b>Exemplo:</b> Farinha de trigo, R$ 25,00, quantidade 5, unidade kg. A ferramenta calcula sozinha quanto custa cada kg.</p>','mat','Ir para Materiais')
++passo('Passo 3 – Produtos','<p>Crie um produto de cada vez. Informe:</p><p>• quantas unidades o <b>lote</b> rende (lote é o que você produz de uma vez);<br>• quantos minutos leva para fazer o lote todo;<br>• quantas unidades vende por mês.</p><p>Depois escolha os materiais e a quantidade usada no lote inteiro. Se usar gráfica ou costureira, coloque em Serviços de terceiros.</p><p><b>Exemplo:</b> um bolo rende 12 fatias, leva 150 minutos e usa 0,5 kg de farinha e 4 ovos.</p><p>O <b>preço sugerido</b> aparece no fim do cadastro. Se você já cobra outro valor, digite em "Preço que você pratica". Toque em Salvar produto.</p>','prod','Ir para Produtos')
++passo('Passo 4 – Orçamento','<p>Preencha o nome e o WhatsApp do cliente, o prazo, a validade, o desconto e o frete. Escolha os produtos e as quantidades. Toque em Enviar por WhatsApp e depois em Abrir no WhatsApp. Se não abrir, use Copiar mensagem e cole na conversa.</p>','orc','Ir para Orçamento')
++passo('Passo 5 – Backup','<p>Seus dados ficam só neste celular. Em Ajustes, toque em Copiar backup e cole o texto em uma conversa do WhatsApp com você mesma. Faça isso de vez em quando. Se trocar de celular, cole o texto em Restaurar backup.</p>'+(gOk()?'<p><b>Entrar com Google:</b> em Ajustes, toque em Entrar com Google. Seus dados passam a ficar salvos na sua conta Google e abrem no celular e no computador, desde que você entre com a mesma conta.</p>':''),'cfg','Ir para Ajustes')
++`<div class="c"><h3 style="margin-top:0">Dicas</h3><p>• Tudo é salvo automaticamente neste aparelho.<br>• Use sempre o mesmo celular e o mesmo navegador. Evite a aba anônima.<br>• Para uma variação de produto (outro tamanho ou material), use o botão Duplicar.<br>• Em Ajustes, "Carregar exemplo" mostra a ferramenta com dados de teste, mas apaga o que você já cadastrou. Use só no começo, para conhecer.</p></div>`;
+const vMat=()=>`<h2>Materiais</h2><p class="h">Cadastre o que você compra. Informe quanto pagou e quanto veio na embalagem.</p><div class="c" id="lst"></div>`
++S.mats.map((m,i)=>`<div class="c" id="mc${i}">${inp(`mats.${i}.nome`,m.nome,'Nome do material')}
+<div class="g3">${num(`mats.${i}.preco`,m.preco,'Preço pago (R$)')}${num(`mats.${i}.qtd`,m.qtd,'Quantidade')}${inp(`mats.${i}.un`,m.un,'Unidade (kg, folha, m)')}</div>
+<p class="o" id="mu${i}"></p><button class="x" onclick="del('mats',${i})">Remover material</button></div>`).join('')
++`<button class="add" onclick="add('mats')">+ Adicionar material</button>`;
+
+const vProd=()=>`<h2>Produtos</h2><p class="h">Monte cada produto com materiais, seu tempo e serviços de terceiros. Para uma variação (outro material ou tamanho), use Duplicar.</p><div class="c mt" id="meta"></div><div class="c" id="lst"></div>`
++(S.mats.length?'':`<p class="c">Cadastre os materiais primeiro, na aba Materiais.</p>`)
++S.prods.map((p,i)=>`<div class="c" id="pc${i}">${inp(`prods.${i}.nome`,p.nome,'Nome do produto')}
+<div class="g3">${num(`prods.${i}.rend`,p.rend,'Unidades que o lote rende')}${num(`prods.${i}.min`,p.min,'Minutos de trabalho (lote todo)')}${num(`prods.${i}.mes`,p.mes,'Vendas por mês')}</div>
+<h3>Materiais usados no lote</h3>
+${p.itens.map((it,j)=>`<div class="row"><select onchange="P('prods.${i}.itens.${j}.mat',this.value)"><option value="">Escolha...</option>${S.mats.map(m=>`<option value="${m.id}" ${m.id==it.mat?'selected':''}>${esc(m.nome||'(sem nome)')}</option>`).join('')}</select>
+<input type="number" inputmode="decimal" min="0" step="any" placeholder="qtd" value="${esc(it.q)}" oninput="P('prods.${i}.itens.${j}.q',this.value)"><span class="u" id="iu${i}_${j}"></span><button class="x" aria-label="Remover" onclick="delSub(${i},'itens',${j})">×</button></div>`).join('')}
+<button class="add s" onclick="addSub(${i},'itens')">+ Material</button>
+<h3>Serviços de terceiros (ex.: gráfica, costureira)</h3>
+${p.terc.map((t,j)=>`<div class="row t"><input placeholder="Descrição" value="${esc(t.desc)}" oninput="P('prods.${i}.terc.${j}.desc',this.value)"><input type="number" inputmode="decimal" min="0" step="any" placeholder="R$" value="${esc(t.valor)}" oninput="P('prods.${i}.terc.${j}.valor',this.value)"><button class="x" aria-label="Remover" onclick="delSub(${i},'terc',${j})">×</button></div>`).join('')}
+<button class="add s" onclick="addSub(${i},'terc')">+ Serviço de terceiros</button>
+<h3>Preço</h3>${num(`prods.${i}.preco`,p.preco,'Preço que você pratica (R$). Vazio usa o sugerido.')}
+<div class="res" id="r${i}"></div><button class="pri" onclick="saveNow(this)">Salvar produto</button><p class="o sv noprint" role="status"></p><button onclick="dup(${i})">Duplicar</button> <button class="x" onclick="del('prods',${i})">Remover produto</button></div>`).join('')
++`<button class="add" onclick="add('prods')">+ Adicionar produto</button>`;
+
+const vOrc=()=>{const o=S.orc;return `<h2>Orçamento</h2>
+<div class="c">${inp('orc.cliente',o.cliente,'Nome do cliente')}${inp('orc.tel',o.tel,'WhatsApp do cliente','type="tel" inputmode="tel"')}
+<div class="g2">${inp('orc.prazo',o.prazo,'Prazo de entrega','type="date"')}${num('orc.validade',o.validade,'Validade (dias)')}</div>
+<div class="g2">${num('orc.desc',o.desc,'Desconto (%)')}${num('orc.frete',o.frete,'Frete (R$)')}</div>${inp('orc.pgto',o.pgto,'Forma de pagamento')}</div>
+<div class="c"><h3 style="margin-top:0">Itens</h3>
+${S.prods.length?'':'<p class="o">Crie produtos primeiro, na aba Produtos.</p>'}
+${o.itens.map((it,j)=>`<div class="row"><select onchange="P('orc.itens.${j}.prod',this.value)"><option value="">Escolha...</option>${S.prods.map(p=>`<option value="${p.id}" ${p.id==it.prod?'selected':''}>${esc(p.nome||'(sem nome)')}</option>`).join('')}</select>
+<input type="number" inputmode="numeric" min="1" value="${esc(it.q)}" oninput="P('orc.itens.${j}.q',this.value)"><span class="u" id="oi${j}"></span><button class="x" aria-label="Remover" onclick="delO(${j})">×</button></div>`).join('')}
+<button class="add s" onclick="addO()">+ Adicionar item</button>
+<div class="res"><div><span>Subtotal</span><span id="sub"></span></div><div><span>Desconto</span><span id="dsc"></span></div><div><span>Frete (repasse)</span><span id="frt"></span></div><div class="tot"><span>Total</span><span id="tot"></span></div></div></div>
+<button class="pri" onclick="zap()">Enviar por WhatsApp</button>
+<div class="c noprint" id="wz" hidden style="margin-top:12px"></div>
+<button class="pri" style="background:transparent;color:var(--pri)" onclick="window.print()">Imprimir ou salvar PDF</button>
+<div class="c noprint" style="margin-top:14px"><h3 style="margin-top:0">Análise interna (não vai para o cliente)</h3><div id="ana"></div></div>`};
+
+const vCfg=()=>`<h2>Ajustes</h2><p class="h">Valem para todos os produtos.</p><div class="c">
+${inp('cfg.nome',S.cfg.nome,'Nome do seu negócio')}
+${num('cfg.hora',S.cfg.hora,'Quanto vale a sua hora de trabalho (R$)')}
+${num('cfg.taxa',S.cfg.taxa,'Taxas de venda (%) – maquininha, plataforma')}
+${num('cfg.margem',S.cfg.margem,'Lucro desejado (%) sobre o preço')}
+${num('cfg.meta',S.cfg.meta,'Meta de resultado por mês (R$)')}</div>
+<h3>Despesas fixas por mês</h3><p class="h">Luz, internet, assinaturas, desgaste de equipamentos. Elas são divididas pelas vendas mensais dos produtos.</p>
+${S.desp.map((d,i)=>`<div class="row t"><input placeholder="Despesa" value="${esc(d.nome)}" oninput="P('desp.${i}.nome',this.value)"><input type="number" inputmode="decimal" min="0" step="any" placeholder="R$" value="${esc(d.valor)}" oninput="P('desp.${i}.valor',this.value)"><button class="x" aria-label="Remover" onclick="del('desp',${i})">×</button></div>`).join('')}
+<button class="add s" onclick="add('desp')">+ Despesa fixa</button>
+<div class="c" id="gsec" hidden></div>
+<h3>Backup dos seus dados</h3><p class="h">${gOk()?'Seus dados ficam neste aparelho e, se você entrar com o Google, também no seu Google Drive.':'Seus dados ficam só neste aparelho.'} Faça backup de vez em quando e depois de cadastrar muita coisa. Ele guarda materiais, produtos, despesas e orçamento.</p>
+<div class="c"><button class="pri" style="margin-top:0" onclick="bkCopy()">Copiar backup</button><p class="h" style="margin-top:8px">Depois de copiar, cole o texto em uma conversa do WhatsApp com você mesma, em um e-mail para você ou em um bloco de notas.</p>
+<h3>Restaurar backup</h3><p class="h">Cole o texto do backup na caixa abaixo. Atenção: isso substitui tudo o que está cadastrado agora neste aparelho.</p>
+<textarea id="bk" placeholder="Cole aqui o texto do backup" aria-label="Texto do backup"></textarea>
+<button class="pri" onclick="bkRest()">Restaurar backup</button><p class="o" id="bkm" role="status"></p></div>
+<button class="add" style="margin-top:16px" onclick="seed()">Carregar exemplo (bolo e cartões de comunicação)</button>`;
+
+function render(){
+  $('#nav').innerHTML=[['ajuda','Como usar'],['mat','Materiais'],['prod','Produtos'],['orc','Orçamento'],['cfg','Ajustes']].map(([k,l])=>`<button class="${tab==k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
+  $('#m').innerHTML={ajuda:vAjuda,mat:vMat,prod:vProd,orc:vOrc,cfg:vCfg}[tab]();
+  if(tab!=='prod'&&tab!=='ajuda')$('#m').insertAdjacentHTML('beforeend','<button class="pri" onclick="saveNow()">Salvar</button><p class="o noprint" id="sv" role="status">Os dados também são salvos automaticamente neste aparelho.</p>');
+  $('#ttl').textContent=S.cfg.nome||'Dona do Preço';
+  upd();gUi();
+}
+function jump(id){const e=document.getElementById(id);if(e)e.scrollIntoView({block:'start'})}
+function saveNow(b){
+  let ok=true;try{localStorage.setItem('precocerto',JSON.stringify(S));ok=localStorage.getItem('precocerto')!==null}catch(e){ok=false}
+  const sem=S.mats.filter(m=>!m.nome).length+S.prods.filter(p=>!p.nome).length;
+  const h=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  (b&&b.nextElementSibling||$('#sv')).textContent=ok?`Salvo às ${h}.`+(sem?` Atenção: ${sem} item(ns) sem nome.`:''):'Não foi possível salvar neste navegador. Evite abrir a página em aba privativa.';
+}
+function go(k){tab=k;render();window.scrollTo(0,0)}
+function bkTxt(){return JSON.stringify({app:'precocerto',v:1,dados:S})}
+function bkMsg(t){const e=$('#bkm');if(e)e.textContent=t}
+function bkCopy(){
+  const t=bkTxt(),ta=$('#bk');ta.value=t;
+  const manual=()=>{ta.focus();ta.select();bkMsg('Não consegui copiar sozinho. Selecione o texto da caixa abaixo, copie e guarde em um lugar seguro.')};
+  try{navigator.clipboard.writeText(t).then(()=>bkMsg('Backup copiado. Cole em uma conversa do WhatsApp com você mesma ou em um bloco de notas.'),manual)}catch(e){manual()}
+}
+function bkRest(){
+  let d;try{d=JSON.parse($('#bk').value);d=d.dados||d}catch(e){bkMsg('Não consegui ler esse backup. Confira se o texto foi copiado por inteiro.');return}
+  if(!d||!Array.isArray(d.mats)||!Array.isArray(d.prods)||!d.cfg||!d.orc){bkMsg('Esse texto não parece um backup do Dona do Preço.');return}
+  S=Object.assign(blank(),d);S.cfg=Object.assign(blank().cfg,d.cfg);S.orc=Object.assign(blank().orc,d.orc);S.orc.itens=S.orc.itens||[];S.desp=S.desp||[];
+  S.prods.forEach(p=>{p.itens=p.itens||[];p.terc=p.terc||[];if(p.min==null)p.min='';if(p.mes==null)p.mes='';if(p.preco==null)p.preco=''});
+  save();render();bkMsg('Backup restaurado. Confira seus materiais e produtos.');
+}
+function upd(){
+  $('#ttl').textContent=S.cfg.nome||'Dona do Preço';
+  S.mats.forEach((m,i)=>{const e=$('#mu'+i);if(e)e.textContent=n(m.qtd)>0?`Custo por ${m.un||'unidade'}: ${R(matUn(m))}`:''});
+  S.prods.forEach((p,i)=>{
+    p.itens.forEach((it,j)=>{const u=$(`#iu${i}_${j}`);const m=findM(it.mat);if(u)u.textContent=m?m.un:''});
+    const e=$('#r'+i);if(!e)return;const c=cost(p);
+    e.innerHTML=`<div><span>Materiais</span><span>${R(c.mat)}</span></div><div><span>Seu trabalho</span><span>${R(c.mo)}</span></div><div><span>Terceiros</span><span>${R(c.ter)}</span></div><div><span>Custos fixos rateados</span><span>${R(c.fixo)}</span></div>
+    <div class="big"><span>Custo por unidade</span><span>${R(c.un)}</span></div><div><span>Preço sugerido</span><span>${R(c.sug)}</span></div><div><span>Lucro por unidade</span><span>${R(c.lucro)}</span></div>
+    <div class="pv"><div><span>Preço de venda</span><span>${R(c.usado)}</span></div></div>${c.av.map(a=>`<p class="al">⚠ ${a}</p>`).join('')}`;
+  });
+  const mt=$('#meta');
+  if(mt){const d=S.desp.reduce((a,x)=>a+n(x.valor),0),rm=resMes(),g=n(S.cfg.meta),v=S.prods.reduce((a,p)=>a+n(p.mes),0);
+    mt.innerHTML=`<div><span>Despesas fixas por mês</span><span>${R(d)}</span></div><div><span>Resultado mensal previsto</span><span>${R(rm)}</span></div>`
+    +(g>0?`<div><b>Falta para a meta de ${R(g)}</b><b>${R(Math.max(g-rm,0))}</b></div>`:'<p class="o">Defina a meta mensal em Ajustes.</p>')
+    +(v>0?'':'<p class="o">Informe as vendas por mês de cada produto para ratear as despesas fixas.</p>');}
+  const l=$('#lst');
+  if(l){const rows=tab==='mat'?S.mats.map((m,i)=>['mc'+i,m.nome,n(m.qtd)>0?`${R(matUn(m))}/${m.un||'un'}`:'sem preço']):S.prods.map((p,i)=>['pc'+i,p.nome,R(cost(p).usado)]);
+    l.innerHTML=`<h3 style="margin-top:0">Já cadastrados (${rows.length})</h3>`+(rows.length?rows.map(r=>`<button class="li" onclick="jump('${r[0]}')"><span>${esc(r[1]||'(sem nome)')}</span><span>${r[2]}</span></button>`).join(''):'<p class="o">Nada cadastrado ainda.</p>');}
+  let sub=0,custo=0;
+  S.orc.itens.forEach((it,j)=>{const p=S.prods.find(x=>x.id==it.prod);const c=p?cost(p):null;const v=c?c.usado*n(it.q):0;sub+=v;custo+=c?c.un*n(it.q):0;const e=$('#oi'+j);if(e)e.textContent=R(v)});
+  const dsc=sub*n(S.orc.desc)/100,fr=n(S.orc.frete),total=sub-dsc+fr;
+  const set=(id,v)=>{const e=$(id);if(e)e.textContent=R(v)};
+  set('#sub',sub);set('#dsc',-dsc);set('#frt',fr);set('#tot',total);
+  const a=$('#ana');
+  if(a){const tx=(sub-dsc)*n(S.cfg.taxa)/100;
+    a.innerHTML=`<div><span>Custo dos itens (com fixos rateados)</span><span>${R(custo)}</span></div><div><span>Taxas sobre a venda</span><span>${R(tx)}</span></div><div class="big"><span>Resultado estimado</span><span>${R(sub-dsc-tx-custo)}</span></div>`}
+  return {sub,dsc,fr,total};
+}
+function zap(){
+  const o=S.orc,t=upd();
+  const dt=x=>x.toLocaleDateString('pt-BR');
+  const lin=o.itens.map(it=>{const p=S.prods.find(x=>x.id==it.prod);if(!p)return '';const q=n(it.q),u=cost(p).usado;return `▪️ ${q}x ${p.nome}${q>1?` (${R(u)} cada)`:''} — *${R(u*q)}*`}).filter(Boolean).join('\n');
+  const d=o.prazo?o.prazo.split('-').reverse().join('/'):'a combinar';
+  const hoje=new Date(),vence=new Date(hoje.getTime()+n(o.validade)*86400000),ln='━━━━━━━━━━━━━━';
+  const txt=`✨ *${S.cfg.nome||'Dona do Preço'}* ✨\n*ORÇAMENTO*\n${ln}\n👤 *Cliente:* ${o.cliente||'—'}\n📅 *Data:* ${dt(hoje)}\n${ln}\n🛍️ *ITENS*\n${lin}\n${ln}\n💰 Subtotal: ${R(t.sub)}${t.dsc?`\n🏷️ Desconto (${n(o.desc)}%): -${R(t.dsc)}`:''}${t.fr?`\n🚚 Frete: ${R(t.fr)}`:''}\n✅ *TOTAL: ${R(t.total)}*\n${ln}\n📦 *Prazo de entrega:* ${d}\n💳 *Pagamento:* ${o.pgto||'a combinar'}\n⏳ *Validade:* ${n(o.validade)} dias (até ${dt(vence)})\n${ln}\n💜 Obrigada pela confiança! Qualquer dúvida, é só me chamar.`;
+  let tel=(o.tel||'').replace(/\D/g,'');if(tel&&tel.length<=11)tel='55'+tel;
+  const url=`https://wa.me/${tel}?text=${encodeURIComponent(txt)}`;
+  const w=$('#wz');w.hidden=false;
+  w.innerHTML=`<h3 style="margin-top:0">Mensagem pronta</h3><p class="h">Toque em Abrir no WhatsApp. Se não abrir, copie a mensagem e cole na conversa com o cliente.</p><textarea id="wt" readonly>${esc(txt)}</textarea><a class="pri lk" href="${url}" target="_blank" rel="noopener">Abrir no WhatsApp</a><button style="width:100%;margin-top:8px" onclick="wzCopy()">Copiar mensagem</button><p class="o" id="wm" role="status"></p>`;
+  w.scrollIntoView({block:'nearest'});
+}
+// ===== Login com Google (salva os dados no Google Drive da própria pessoa) =====
+// Cole abaixo o ID do cliente criado no Google Cloud (termina com .apps.googleusercontent.com)
+const GCLIENT='COLE_AQUI_O_CLIENT_ID';
+const GFILE='dona-do-preco.json',GSCOPE='openid email https://www.googleapis.com/auth/drive.appdata';
+let G={tok:null,exp:0,id:null,email:'',msg:'',conf:null},gTc=null,gT=null;
+const gOk=()=>!GCLIENT.startsWith('COLE');
+const gFlag=()=>{try{return localStorage.getItem('dp_g')==='1'}catch(e){return false}};
+const gLS=()=>{try{return localStorage.getItem('dp_gt')}catch(e){return null}};
+const gSetLS=v=>{try{localStorage.setItem('dp_gt',String(v))}catch(e){}};
+const hh=()=>new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const hasData=d=>!!(d&&((d.mats||[]).length||(d.prods||[]).length||(d.desp||[]).length||(d.orc&&d.orc.cliente)));
+const same=(a,b)=>JSON.stringify({...a,_t:0})===JSON.stringify({...b,_t:0});
+function norm(d){const o=Object.assign(blank(),d);o.cfg=Object.assign(blank().cfg,d.cfg);o.orc=Object.assign(blank().orc,d.orc);o.orc.itens=o.orc.itens||[];o.desp=o.desp||[];o.mats=o.mats||[];o.prods=o.prods||[];o.prods.forEach(p=>{p.itens=p.itens||[];p.terc=p.terc||[];if(p.min==null)p.min='';if(p.mes==null)p.mes='';if(p.preco==null)p.preco=''});return o}
+function gUi(){
+  const st=$('#gs'),sec=$('#gsec'),on=gOk();
+  if(st){st.textContent='';if(on&&G.tok)st.textContent='☁️ '+G.msg;else if(on&&gFlag())st.innerHTML='<button class="add s" onclick="gLogin()">Reconectar ao Google para sincronizar</button>'}
+  if(!sec)return;
+  sec.hidden=!on;if(!on)return;
+  let h='<h3 style="margin-top:0">Entrar com Google</h3>';
+  if(G.conf){const c=G.conf.cloud,cnt=d=>`${d.mats.length} materiais e ${d.prods.length} produtos`;
+    h+=`<p>Encontramos dados no seu Google Drive e dados diferentes neste aparelho. Qual você quer manter?</p><p class="h">Google Drive: ${cnt(c)}.<br>Este aparelho: ${cnt(S)}.</p><button class="pri" onclick="gUseCloud()">Usar os dados do Google Drive</button><button class="add" style="margin-top:8px" onclick="gUseLocal()">Usar os dados deste aparelho</button>`}
+  else if(G.tok)h+=`<p>Conta conectada: <b>${esc(G.email)}</b></p><p class="o">${esc(G.msg)}</p><button style="margin-top:8px" onclick="gOut()">Sair da conta Google</button>`;
+  else h+=`<p class="h">Entre com sua conta Google para abrir seus dados no celular e no computador. Eles ficam numa pasta do aplicativo no seu Google Drive, que só este aplicativo consegue abrir.</p>${G.msg?`<p class="o">${esc(G.msg)}</p>`:''}<button class="pri" style="margin-top:0" onclick="gLogin()">Entrar com Google</button>`;
+  sec.innerHTML=h;
+}
+function gLogin(){
+  if(!gOk())return;
+  if(!window.google||!google.accounts){G.msg='Não consegui carregar o login do Google. Verifique a internet e recarregue a página.';gUi();return}
+  if(!gTc)gTc=google.accounts.oauth2.initTokenClient({client_id:GCLIENT,scope:GSCOPE,callback:gTok,error_callback:e=>{G.msg=(e&&e.type==='popup_closed')?'Login cancelado.':'Não foi possível entrar. Tente de novo.';gUi()}});
+  gTc.requestAccessToken();
+}
+async function gTok(r){
+  if(!r||r.error){G.msg='Não foi possível entrar com o Google.';gUi();return}
+  if(!google.accounts.oauth2.hasGrantedAllScopes(r,'https://www.googleapis.com/auth/drive.appdata')){G.msg='Para salvar seus dados, permita o acesso à pasta do aplicativo no Google Drive e tente de novo.';gUi();return}
+  G.tok=r.access_token;G.exp=Date.now()+((r.expires_in||3600)-60)*1000;
+  try{localStorage.setItem('dp_g','1')}catch(e){}
+  try{const u=await (await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+G.tok}})).json();G.email=u.email||''}catch(e){}
+  gSync();
+}
+function gOut(){
+  try{if(G.tok&&window.google)google.accounts.oauth2.revoke(G.tok,()=>{})}catch(e){}
+  G.tok=null;G.id=null;G.email='';G.conf=null;G.msg='';
+  try{localStorage.removeItem('dp_g');localStorage.removeItem('dp_gt')}catch(e){}
+  gUi();
+}
+async function gApi(url,opt={}){
+  const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:'Bearer '+G.tok}});
+  if(r.status===401){G.tok=null;throw new Error('401')}
+  if(!r.ok)throw new Error('http '+r.status);
+  return r;
+}
+async function gFind(){
+  const r=await gApi(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${encodeURIComponent(`name='${GFILE}'`)}&fields=${encodeURIComponent('files(id)')}`);
+  const j=await r.json();return j.files&&j.files[0]?j.files[0].id:null;
+}
+async function gPut(){
+  const body=JSON.stringify(S);
+  if(G.id){await gApi(`https://www.googleapis.com/upload/drive/v3/files/${G.id}?uploadType=media`,{method:'PATCH',headers:{'Content-Type':'application/json'},body});return}
+  const bd='dp'+uid()+uid();
+  const mp=`--${bd}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify({name:GFILE,parents:['appDataFolder']})}\r\n--${bd}\r\nContent-Type: application/json\r\n\r\n${body}\r\n--${bd}--`;
+  const r=await gApi('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+bd},body:mp});
+  G.id=(await r.json()).id;
+}
+async function gPush(){if(!S._t)S._t=Date.now();const t=S._t;await gPut();gSetLS(t)}
+function gAdopt(c){S=norm(c);try{localStorage.setItem('precocerto',JSON.stringify(S))}catch(e){}gSetLS(S._t);render()}
+async function gSync(){
+  try{
+    G.msg='Conectando ao Google Drive…';gUi();
+    G.id=await gFind();
+    let c=null;
+    if(G.id){c=await (await gApi(`https://www.googleapis.com/drive/v3/files/${G.id}?alt=media`)).json()}
+    const ok=c&&Array.isArray(c.mats)&&Array.isArray(c.prods)&&c.cfg&&c.orc;
+    if(!ok||!hasData(c)){await gPush();G.msg='Seus dados foram enviados ao Google Drive às '+hh()+'.'}
+    else if(!hasData(S)){gAdopt(c);G.msg='Dados carregados do Google Drive às '+hh()+'.'}
+    else if(same(c,S)){gSetLS(c._t);G.msg='Tudo sincronizado às '+hh()+'.'}
+    else{const ls=gLS();
+      if(String(c._t)===ls){await gPush();G.msg='Seus dados foram enviados ao Google Drive às '+hh()+'.'}
+      else if(String(S._t)===ls){gAdopt(c);G.msg='Dados atualizados com o Google Drive às '+hh()+'.'}
+      else{G.conf={cloud:norm(c)};G.msg='Escolha quais dados manter.'}}
+  }catch(e){G.msg=G.tok?'Não consegui falar com o Google Drive. Os dados continuam salvos neste aparelho.':'Sessão do Google expirou. Toque em Reconectar.'}
+  gUi();
+}
+async function gUseCloud(){const c=G.conf&&G.conf.cloud;if(!c)return;G.conf=null;gAdopt(c);G.msg='Dados carregados do Google Drive às '+hh()+'.';gUi()}
+async function gUseLocal(){G.conf=null;try{await gPush();G.msg='Seus dados foram enviados ao Google Drive às '+hh()+'.'}catch(e){G.msg='Não consegui salvar no Google Drive.'}gUi()}
+function gQueue(){
+  if(!gOk()||!G.tok||G.conf)return;
+  clearTimeout(gT);
+  gT=setTimeout(async()=>{
+    if(Date.now()>G.exp){G.tok=null;G.msg='Sessão do Google expirou. Toque em Reconectar.';gUi();return}
+    try{await gPush();G.msg='Salvo no Google Drive às '+hh()+'.'}catch(e){G.msg=G.tok?'Não consegui salvar no Google Drive. Os dados estão salvos neste aparelho.':'Sessão do Google expirou. Toque em Reconectar.'}
+    gUi();
+  },2000);
+}
+function wzCopy(){
+  const t=$('#wt'),m=$('#wm');t.select();
+  const man=()=>{m.textContent='Não consegui copiar sozinho. Selecione o texto da caixa e copie.'};
+  try{navigator.clipboard.writeText(t.value).then(()=>{m.textContent='Mensagem copiada. Cole na conversa do WhatsApp.'},man)}catch(e){man()}
+}
+function seed(){
+  const id=()=>uid();const [fa,ac,ov,ch,cx,pa]=[id(),id(),id(),id(),id(),id()];
+  S.cfg={nome:S.cfg.nome,hora:20,taxa:3,margem:30,meta:1600};
+  S.mats=[{id:fa,nome:'Farinha de trigo',preco:25,qtd:5,un:'kg'},{id:ac,nome:'Açúcar',preco:5,qtd:1,un:'kg'},{id:ov,nome:'Ovos',preco:24,qtd:30,un:'un'},{id:ch,nome:'Chocolate',preco:38,qtd:1,un:'kg'},{id:cx,nome:'Caixa para bolo',preco:12,qtd:5,un:'un'},{id:pa,nome:'Papel fotográfico',preco:40,qtd:100,un:'folha'}];
+  S.desp=[{nome:'Energia',valor:40},{nome:'Internet',valor:60},{nome:'Manutenção de equipamentos',valor:30}];
+  const b={id:id(),nome:'Bolo de chocolate',rend:12,min:150,mes:20,preco:'',itens:[{mat:fa,q:.5},{mat:ac,q:.4},{mat:ov,q:4},{mat:ch,q:.3},{mat:cx,q:1}],terc:[]};
+  const c={id:id(),nome:'Kit de cartões de comunicação',rend:1,min:90,mes:10,preco:'',itens:[{mat:pa,q:3}],terc:[{desc:'Impressão na gráfica',valor:35}]};
+  S.prods=[b,c];S.orc.itens=[{prod:b.id,q:1},{prod:c.id,q:2}];
+  save();tab='prod';render();window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>
