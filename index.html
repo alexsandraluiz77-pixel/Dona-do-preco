@@ -54,12 +54,13 @@ textarea{display:block;width:100%;min-height:90px;margin:8px 0;padding:11px;font
 .lk{display:block;text-align:center;text-decoration:none;padding:12px 14px;border-radius:8px}
 nav button{padding:8px 2px;font-size:.82rem}
 textarea:focus{outline:3px solid var(--pri);outline-offset:1px}
+.hb{margin-left:auto;min-height:40px;font-size:.9rem;padding:6px 12px;border-color:var(--pri);color:var(--pri);background:transparent;font-weight:700}
 .li{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--bd);border-radius:0;background:transparent}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-<header><svg width="46" height="46" viewBox="0 0 50 50" role="img" aria-label="Símbolo do autismo: peças de quebra-cabeça coloridas"><g transform="translate(0,0) rotate(0 12 12)" fill="#1a62c9"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,0) rotate(90 12 12)" fill="#e5383b"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(0,25) rotate(270 12 12)" fill="#f2b705"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,25) rotate(180 12 12)" fill="#2a9d5c"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g></svg><h1 id="ttl">Dona do Preço</h1></header>
+<header><svg width="46" height="46" viewBox="0 0 50 50" role="img" aria-label="Símbolo do autismo: peças de quebra-cabeça coloridas"><g transform="translate(0,0) rotate(0 12 12)" fill="#1a62c9"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,0) rotate(90 12 12)" fill="#e5383b"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(0,25) rotate(270 12 12)" fill="#f2b705"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g><g transform="translate(25,25) rotate(180 12 12)" fill="#2a9d5c"><path d="M3 9h6a3 3 0 1 1 6 0h6v13H3z"/></g></svg><h1 id="ttl">Dona do Preço</h1><button class="hb" onclick="go('ajuda')">❓ Como usar</button></header>
 <div id="gs" class="noprint" role="status" style="max-width:640px;margin:0 auto;padding:6px 16px;font-size:.9rem;color:var(--mut)"></div>
 <main id="m"></main>
 <footer class="noprint"><svg width="40" height="20" viewBox="0 0 24 12" role="img" aria-label="Símbolo do infinito, da neurodiversidade"><defs><linearGradient id="rb"><stop offset="0" stop-color="#e5383b"/><stop offset=".25" stop-color="#f2b705"/><stop offset=".5" stop-color="#2a9d5c"/><stop offset=".75" stop-color="#1a62c9"/><stop offset="1" stop-color="#7a3fb5"/></linearGradient></defs><path d="M12 6C9 1 2 1 2 6s7 5 10 0 10-5 10 0-7 5-10 0z" fill="none" stroke="url(#rb)" stroke-width="2.2" stroke-linecap="round"/></svg><span>Feita com carinho para mães atípicas · <a href="privacidade.html" style="color:inherit">Política de privacidade</a></span></footer>
@@ -182,6 +183,7 @@ function render(){
   $('#m').innerHTML={ajuda:vAjuda,mat:vMat,prod:vProd,orc:vOrc,cfg:vCfg}[tab]();
   if(tab!=='prod'&&tab!=='ajuda')$('#m').insertAdjacentHTML('beforeend','<button class="pri" onclick="saveNow()">Salvar</button><p class="o noprint" id="sv" role="status">Os dados também são salvos automaticamente neste aparelho.</p>');
   $('#ttl').textContent=S.cfg.nome||'Dona do Preço';
+  $('.hb').hidden=tab==='ajuda';
   upd();gUi();
 }
 function jump(id){const e=document.getElementById(id);if(e)e.scrollIntoView({block:'start'})}
@@ -249,7 +251,7 @@ function zap(){
 }
 // ===== Login com Google (salva os dados no Google Drive da própria pessoa) =====
 // Cole abaixo o ID do cliente criado no Google Cloud (termina com .apps.googleusercontent.com)
-const GCLIENT='COLE_AQUI_O_CLIENT_ID';
+const GCLIENT='213439870873-hpm0pa5f7qan504frvb772lpedaasj7b.apps.googleusercontent.com';
 const GFILE='dona-do-preco.json',GSCOPE='openid email https://www.googleapis.com/auth/drive.appdata';
 let G={tok:null,exp:0,id:null,email:'',msg:'',conf:null},gTc=null,gT=null;
 const gOk=()=>!GCLIENT.startsWith('COLE');
