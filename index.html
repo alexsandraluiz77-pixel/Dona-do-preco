@@ -124,7 +124,7 @@ const vAjuda=()=>`<h2>Como usar o Dona do Preço</h2><p class="h">Siga a ordem a
 +passo('Passo 3 – Produtos','<p>Crie um produto de cada vez. Informe:</p><p>• quantas unidades o <b>lote</b> rende (lote é o que você produz de uma vez);<br>• quantos minutos leva para fazer o lote todo;<br>• quantas unidades vende por mês.</p><p>Depois escolha os materiais e a quantidade usada no lote inteiro. Se usar gráfica ou costureira, coloque em Serviços de terceiros.</p><p><b>Exemplo:</b> um bolo rende 12 fatias, leva 150 minutos e usa 0,5 kg de farinha e 4 ovos.</p><p>O <b>preço sugerido</b> aparece no fim do cadastro. Se você já cobra outro valor, digite em "Preço que você pratica". Toque em Salvar produto.</p>','prod','Ir para Produtos')
 +passo('Passo 4 – Orçamento','<p>Preencha o nome e o WhatsApp do cliente, o prazo, a validade, o desconto e o frete. Escolha os produtos e as quantidades. Toque em Enviar por WhatsApp e depois em Abrir no WhatsApp. Se não abrir, use Copiar mensagem e cole na conversa.</p>','orc','Ir para Orçamento')
 +passo('Passo 5 – Salvar seus dados','<p><b>Recomendado: entrar com o Google.</b> Em Ajustes, toque em <b>Entrar com Google</b> e use a mesma conta no celular e no computador. Seus dados ficam salvos no seu Google Drive e aparecem em qualquer aparelho. Ao entrar, o Google mostra um aviso de que o app não foi verificado: toque em <b>Avançado</b> e depois em <b>Acessar Dona do Preço</b>.</p><p>Se preferir <b>não entrar</b>, seus dados ficam só neste aparelho. Nesse caso, faça o <b>backup</b> de vez em quando: em Ajustes, toque em Copiar backup e cole o texto em uma conversa do WhatsApp com você mesma. Se trocar de celular, cole o texto em Restaurar backup.</p><p>Quem entra com o Google também pode fazer o backup como cópia extra, por exemplo antes de mudar muita coisa.</p>','cfg','Ir para Ajustes')
-+`<div class="c"><h3 style="margin-top:0">Dicas</h3><p>• Tudo é salvo automaticamente neste aparelho. Com o login do Google, também no seu Google Drive.<br>• Sem o login, use sempre o mesmo celular e o mesmo navegador, e evite a aba anônima.<br>• Para uma variação de produto (outro tamanho ou material), use o botão Duplicar.<br>• Em Ajustes, "Carregar exemplo" mostra a ferramenta com dados de teste, mas apaga o que você já cadastrou. Use só no começo, para conhecer.</p></div>`;
++`<div class="c"><h3 style="margin-top:0">Dicas</h3><p>• Tudo é salvo automaticamente neste aparelho. Com o login do Google, também no seu Google Drive.<br>• Sem o login, use sempre o mesmo celular e o mesmo navegador, e evite a aba anônima.<br>• Para uma variação de produto (outro tamanho ou material), use o botão Duplicar.</p></div>`;
 const vMat=()=>`<h2>Materiais</h2><p class="h">Cadastre o que você compra. Informe quanto pagou e quanto veio na embalagem.</p><div class="c" id="lst"></div>`
 +S.mats.map((m,i)=>`<div class="c" id="mc${i}">${inp(`mats.${i}.nome`,m.nome,'Nome do material')}
 <div class="g3">${num(`mats.${i}.preco`,m.preco,'Preço pago (R$)')}${num(`mats.${i}.qtd`,m.qtd,'Quantidade')}${inp(`mats.${i}.un`,m.un,'Unidade (kg, folha, m)')}</div>
@@ -176,7 +176,9 @@ ${S.desp.map((d,i)=>`<div class="row t"><input placeholder="Despesa" value="${es
 <h3>Restaurar backup</h3><p class="h">Cole o texto do backup na caixa abaixo. Atenção: isso substitui tudo o que está cadastrado agora neste aparelho.</p>
 <textarea id="bk" placeholder="Cole aqui o texto do backup" aria-label="Texto do backup"></textarea>
 <button class="pri" onclick="bkRest()">Restaurar backup</button><p class="o" id="bkm" role="status"></p></div>
-<button class="add" style="margin-top:16px" onclick="seed()">Carregar exemplo (bolo e cartões de comunicação)</button>`;
+<h3>Apagar meus dados</h3><p class="h">Use se quiser recomeçar do zero. Isso apaga materiais, produtos, despesas e orçamento deste aparelho${typeof gOk==='function'&&gOk()?' e, se você estiver conectada, também do seu Google Drive':''}.</p>
+${wipeAsk?`<div class="c"><p><b>Tem certeza?</b> Não dá para desfazer. Se quiser guardar uma cópia, faça o backup antes.</p><button class="pri" style="background:var(--bad);border-color:var(--bad);margin-top:0" onclick="wipe()">Sim, apagar tudo</button><button class="add" style="margin-top:8px" onclick="wipeAsk=false;render()">Cancelar</button></div>`:`<button class="x" style="margin-top:0" onclick="wipeAsk=true;render()">Apagar todos os meus dados</button>`}
+${wipeNote?`<p class="o" role="status">${wipeNote}</p>`:''}`;
 
 function render(){
   $('#nav').innerHTML=[['ajuda','Como usar'],['mat','Materiais'],['prod','Produtos'],['orc','Orçamento'],['cfg','Ajustes']].map(([k,l])=>`<button class="${tab==k?'on':''}" onclick="go('${k}')">${l}</button>`).join('');
@@ -193,7 +195,14 @@ function saveNow(b){
   const h=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   (b&&b.nextElementSibling||$('#sv')).textContent=ok?`Salvo às ${h}.`+(sem?` Atenção: ${sem} item(ns) sem nome.`:''):'Não foi possível salvar neste navegador. Evite abrir a página em aba privativa.';
 }
-function go(k){tab=k;render();window.scrollTo(0,0)}
+let wipeAsk=false,wipeNote='';
+function wipe(){
+  wipeAsk=false;S=blank();save();
+  wipeNote='Dados apagados.';
+  if(typeof gOk==='function'&&gOk()&&!G.tok&&gFlag())wipeNote+=' Atenção: você está desconectada do Google. Toque em Reconectar, entre de novo e apague outra vez para limpar também o Google Drive.';
+  render();
+}
+function go(k){tab=k;wipeNote='';wipeAsk=false;render();window.scrollTo(0,0)}
 function bkTxt(){return JSON.stringify({app:'precocerto',v:1,dados:S})}
 function bkMsg(t){const e=$('#bkm');if(e)e.textContent=t}
 function bkCopy(){
